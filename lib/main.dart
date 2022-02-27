@@ -26,7 +26,22 @@ class AppContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Column(
+        children: const [
+          Expanded(child: DetailsSection()),
+        ],
+      ),
+    );
+  }
+}
+
+class DetailsSection extends StatelessWidget {
+  const DetailsSection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
