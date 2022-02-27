@@ -203,8 +203,8 @@ class SkillsCard extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              width: 48,
-              height: 48,
+              width: 96,
+              height: 96,
               child: FittedBox(
                 fit: BoxFit.contain,
                 child: Image(
