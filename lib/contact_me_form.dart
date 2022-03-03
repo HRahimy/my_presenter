@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:my_presenter/bloc/contact_me_form/contact_me_form_cubit.dart';
 
 class ContactMeForm extends StatelessWidget {
@@ -11,20 +12,17 @@ class ContactMeForm extends StatelessWidget {
       width: 500,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
+        children: const [
+          Text(
             'Please submit these details and I\'ll get back to you ASAP',
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          const _EmailField(),
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          const _DescriptionField(),
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Send'),
-          ),
+          Padding(padding: EdgeInsets.only(top: 12)),
+          _EmailField(),
+          Padding(padding: EdgeInsets.only(top: 12)),
+          _DescriptionField(),
+          Padding(padding: EdgeInsets.only(top: 12)),
+          _SubmitButton(),
         ],
       ),
     );
@@ -74,6 +72,30 @@ class _DescriptionField extends StatelessWidget {
             errorText: state.description.errorText,
             border: const OutlineInputBorder(),
           ),
+        );
+      },
+    );
+  }
+}
+
+class _SubmitButton extends StatelessWidget {
+  const _SubmitButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<ContactMeFormCubit>();
+    return BlocBuilder<ContactMeFormCubit, ContactMeFormState>(
+      builder: (context, state) {
+        if (state.status.isSubmissionInProgress) {
+          return const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: CircularProgressIndicator(),
+          );
+        }
+        return ElevatedButton(
+          onPressed:
+              state.status.isValidated ? () => cubit.submitRequest() : null,
+          child: const Text('Send'),
         );
       },
     );

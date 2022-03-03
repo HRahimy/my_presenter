@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:my_presenter/models/email_field.dart';
@@ -7,7 +8,12 @@ import 'package:my_presenter/models/message_field.dart';
 part 'contact_me_form_state.dart';
 
 class ContactMeFormCubit extends Cubit<ContactMeFormState> {
-  ContactMeFormCubit() : super(const ContactMeFormState());
+  ContactMeFormCubit({
+    required FirebaseFirestore firestore,
+  })  : _firestore = firestore,
+        super(const ContactMeFormState());
+
+  final FirebaseFirestore _firestore;
 
   void openForm() => emit(const ContactMeFormState(opened: true));
 
@@ -31,5 +37,31 @@ class ContactMeFormCubit extends Cubit<ContactMeFormState> {
         description,
       ]),
     ));
+  }
+
+  Future<void> submitRequest() async {
+    emit(state.copyWith(
+      status: FormzStatus.submissionInProgress,
+    ));
+    try {
+      CollectionReference contactRequests =
+          _firestore.collection('contactRequests');
+      await contactRequests.add({
+        'email': state.email.value,
+        'description': state.description.value,
+        'createdOn': DateTime.now().toIso8601String(),
+      });
+
+      emit(state.copyWith(
+        opened: false,
+        status: FormzStatus.submissionSuccess,
+        error: '',
+      ));
+    } catch (_) {
+      emit(state.copyWith(
+        status: FormzStatus.submissionFailure,
+        error: _.toString(),
+      ));
+    }
   }
 }

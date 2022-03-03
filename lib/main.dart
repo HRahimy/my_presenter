@@ -1,26 +1,52 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_presenter/bloc/contact_me_form/contact_me_form_cubit.dart';
+import 'package:my_presenter/bloc_observer.dart';
 import 'package:my_presenter/contact_me_form.dart';
+import 'package:my_presenter/firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final FirebaseFirestore firestoreInsance = FirebaseFirestore.instance;
+  BlocOverrides.runZoned(
+    () {
+      runApp(MyApp(
+        firestoreInstance: firestoreInsance,
+      ));
+    },
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({
+    Key? key,
+    required this.firestoreInstance,
+  }) : super(key: key);
+
+  final FirebaseFirestore firestoreInstance;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ContactMeFormCubit>(
-      create: (_) => ContactMeFormCubit(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Hamza Rahimy Portfolio',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+    return RepositoryProvider<FirebaseFirestore>.value(
+      value: firestoreInstance,
+      child: BlocProvider<ContactMeFormCubit>(
+        create: (_) => ContactMeFormCubit(
+          firestore: firestoreInstance,
         ),
-        home: const AppContent(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Hamza Rahimy Portfolio',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const AppContent(),
+        ),
       ),
     );
   }
@@ -264,5 +290,3 @@ class ContactMeSection extends StatelessWidget {
     );
   }
 }
-
-
