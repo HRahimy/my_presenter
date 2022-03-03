@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_presenter/bloc/contact_me_form/contact_me_form_cubit.dart';
+import 'package:my_presenter/contact_me_form.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,13 +12,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Hamza Rahimy Portfolio',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider<ContactMeFormCubit>(
+      create: (_) => ContactMeFormCubit(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Hamza Rahimy Portfolio',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const AppContent(),
       ),
-      home: const AppContent(),
     );
   }
 }
@@ -227,94 +233,36 @@ class SkillsCard extends StatelessWidget {
   }
 }
 
-class ContactMeSection extends StatefulWidget {
+class ContactMeSection extends StatelessWidget {
   const ContactMeSection({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ContactMeSectionState();
-}
-
-class ContactMeSectionState extends State<ContactMeSection> {
-  bool showForm = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: showForm
-          ? Column(
-              children: [
-                const Divider(thickness: 1.5),
-                ContactMeForm(
-                  onSent: () {
-                    setState(() {
-                      showForm = false;
-                    });
-                  },
+    return BlocBuilder<ContactMeFormCubit, ContactMeFormState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: state.opened
+              ? Column(
+                  children: const [
+                    Divider(thickness: 1.5),
+                    ContactMeForm(),
+                  ],
                 )
-              ],
-            )
-          : Column(
-              children: [
-                const Divider(thickness: 1.5),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      showForm = true;
-                    });
-                  },
-                  child: const Text('✉  Contact me'),
-                )
-              ],
-            ),
+              : Column(
+                  children: [
+                    const Divider(thickness: 1.5),
+                    ElevatedButton(
+                      onPressed: () =>
+                          context.read<ContactMeFormCubit>().openForm(),
+                      child: const Text('✉  Contact me'),
+                    )
+                  ],
+                ),
+        );
+      },
     );
   }
 }
 
-class ContactMeForm extends StatelessWidget {
-  const ContactMeForm({
-    Key? key,
-    this.onSent,
-  }) : super(key: key);
-  final Function()? onSent;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 500,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Please submit these details and I\'ll get back to you ASAP',
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          const TextField(
-            decoration: InputDecoration(
-              labelText: 'Email address',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          const TextField(
-            maxLines: 4,
-            decoration: InputDecoration(
-              labelText: 'Describe your problem',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 12)),
-          ElevatedButton(
-            onPressed: onSent,
-            child: const Text('Send'),
-          ),
-        ],
-      ),
-    );
-  }
-}
