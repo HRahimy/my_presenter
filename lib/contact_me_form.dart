@@ -19,15 +19,7 @@ class ContactMeForm extends StatelessWidget {
           const Padding(padding: EdgeInsets.only(top: 12)),
           const _EmailField(),
           const Padding(padding: EdgeInsets.only(top: 12)),
-          const TextField(
-            maxLines: 4,
-            decoration: InputDecoration(
-              labelText: 'Describe your problem',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-          ),
+          const _DescriptionField(),
           const Padding(padding: EdgeInsets.only(top: 12)),
           ElevatedButton(
             onPressed: () {},
@@ -56,6 +48,31 @@ class _EmailField extends StatelessWidget {
             filled: true,
             border: const OutlineInputBorder(),
             errorText: state.email.errorText,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _DescriptionField extends StatelessWidget {
+  const _DescriptionField({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<ContactMeFormCubit>();
+    return BlocBuilder<ContactMeFormCubit, ContactMeFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          maxLines: 4,
+          initialValue: cubit.state.description.value,
+          onChanged: (value) => cubit.updateDescription(value),
+          decoration: InputDecoration(
+            labelText: 'Describe your problem',
+            fillColor: Colors.white,
+            filled: true,
+            errorText: state.description.errorText,
+            border: const OutlineInputBorder(),
           ),
         );
       },

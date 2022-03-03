@@ -13,4 +13,14 @@ class MessageField extends FormzInput<String, MessageFieldValidationError> {
         ? null
         : MessageFieldValidationError.empty;
   }
+
+  String? get errorText {
+    if (error != null && !pure) {
+      switch (error!) {
+        case MessageFieldValidationError.empty:
+          return 'You need to write a description';
+      }
+    }
+    return null;
+  }
 }
