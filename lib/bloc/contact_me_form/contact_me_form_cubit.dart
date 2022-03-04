@@ -45,7 +45,7 @@ class ContactMeFormCubit extends Cubit<ContactMeFormState> {
     ));
     try {
       final String normalEmail =
-          state.email.value.replaceAll(RegExp(r'.'), '__');
+          state.email.value.replaceAll(RegExp(r'\.'), '__');
       DatabaseReference ref =
           _database.ref('contactRequests/$normalEmail/${const Uuid().v4()}');
       await ref.set({
