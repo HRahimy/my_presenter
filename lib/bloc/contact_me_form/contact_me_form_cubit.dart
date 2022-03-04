@@ -44,10 +44,11 @@ class ContactMeFormCubit extends Cubit<ContactMeFormState> {
       status: FormzStatus.submissionInProgress,
     ));
     try {
-      DatabaseReference ref = _database
-          .ref('contactRequests/${const Uuid().v4()}');
+      final String normalEmail =
+          state.email.value.replaceAll(RegExp(r'.'), '__');
+      DatabaseReference ref =
+          _database.ref('contactRequests/$normalEmail/${const Uuid().v4()}');
       await ref.set({
-        "email": state.email.value,
         "description": state.description.value,
         "createdOn": DateTime.now().toIso8601String(),
       });
