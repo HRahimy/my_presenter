@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_presenter/bloc/contact_me_form/contact_me_form_cubit.dart';
@@ -16,11 +16,11 @@ Future<void> main() async {
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: '6LcEi7IeAAAAADgGd0o4vaSeUyr8s8oXwFDu26Ne',
   );
-  final FirebaseFirestore firestoreInsance = FirebaseFirestore.instance;
+  final FirebaseDatabase database = FirebaseDatabase.instance;
   BlocOverrides.runZoned(
     () {
       runApp(MyApp(
-        firestoreInstance: firestoreInsance,
+        firebaseDatabase: database,
       ));
     },
     blocObserver: AppBlocObserver(),
@@ -30,19 +30,17 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({
     Key? key,
-    required this.firestoreInstance,
+    required this.firebaseDatabase,
   }) : super(key: key);
 
-  final FirebaseFirestore firestoreInstance;
+  final FirebaseDatabase firebaseDatabase;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<FirebaseFirestore>.value(
-      value: firestoreInstance,
+    return RepositoryProvider<FirebaseDatabase>.value(
+      value: firebaseDatabase,
       child: BlocProvider<ContactMeFormCubit>(
-        create: (_) => ContactMeFormCubit(
-          firestore: firestoreInstance,
-        ),
+        create: (_) => ContactMeFormCubit(database: firebaseDatabase),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Hamza Rahimy Portfolio',

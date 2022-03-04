@@ -1,19 +1,19 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:formz/formz.dart';
 import 'package:my_presenter/models/email_field.dart';
 import 'package:my_presenter/models/message_field.dart';
+import 'package:uuid/uuid.dart';
 
 part 'contact_me_form_state.dart';
 
 class ContactMeFormCubit extends Cubit<ContactMeFormState> {
   ContactMeFormCubit({
-    required FirebaseFirestore firestore,
-  })  : _firestore = firestore,
+    required FirebaseDatabase database,
+  })  : _database = database,
         super(const ContactMeFormState());
-
-  final FirebaseFirestore _firestore;
+  final FirebaseDatabase _database;
 
   void openForm() => emit(const ContactMeFormState(opened: true));
 
@@ -44,12 +44,12 @@ class ContactMeFormCubit extends Cubit<ContactMeFormState> {
       status: FormzStatus.submissionInProgress,
     ));
     try {
-      CollectionReference contactRequests =
-          _firestore.collection('contactRequests');
-      await contactRequests.add({
-        'email': state.email.value,
-        'description': state.description.value,
-        'createdOn': DateTime.now().toIso8601String(),
+      DatabaseReference ref = _database
+          .ref('contactRequests/${const Uuid().v4()}');
+      await ref.set({
+        "email": state.email.value,
+        "description": state.description.value,
+        "createdOn": DateTime.now().toIso8601String(),
       });
 
       emit(state.copyWith(

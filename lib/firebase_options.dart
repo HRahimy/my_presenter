@@ -45,6 +45,7 @@ class DefaultFirebaseOptions {
     appId: '1:279872623904:web:095e1343005395434b3345',
     messagingSenderId: '279872623904',
     projectId: 'h-portfolio-8a5ca',
+    databaseURL: 'https://h-portfolio-8a5ca-default-rtdb.europe-west1.firebasedatabase.app/',
     authDomain: 'h-portfolio-8a5ca.firebaseapp.com',
     storageBucket: 'h-portfolio-8a5ca.appspot.com',
     measurementId: 'G-EF5J057D3V',
