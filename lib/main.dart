@@ -1,9 +1,11 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_presenter/bloc_observer.dart';
 import 'package:my_presenter/firebase_options.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,6 +89,8 @@ class DetailsSection extends StatelessWidget {
             ),
             Divider(),
             CardsWrap(),
+            Divider(),
+            CommonPadding(child: ContactDetails()),
           ],
         ),
       ),
@@ -259,9 +263,91 @@ class SkillsCard extends StatelessWidget {
 class ContactDetails extends StatelessWidget {
   const ContactDetails({Key? key}) : super(key: key);
 
+  Widget emailText() {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+        children: <InlineSpan>[
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: Icon(Icons.email_rounded),
+            ),
+          ),
+          const TextSpan(text: 'Send me an email at '),
+          TextSpan(
+            style: const TextStyle(
+              color: Colors.blue,
+            ),
+            text: 'hamzarahimy004@gmail.com',
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => launch('mailto:hamzarahimy004@gmail.com'),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget githubLink() {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+        children: <InlineSpan>[
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: SizedBox(
+                width: 22,
+                height: 22,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Image(
+                    image: AssetImage('assets/images/github_logo.png'),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const TextSpan(text: 'Check out my '),
+          TextSpan(
+            style: const TextStyle(
+              color: Colors.blue,
+            ),
+            text: 'GitHub profile',
+            recognizer: TapGestureRecognizer()
+              ..onTap = () => launch('https://github.com/HRahimy'),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Text(
+            'Contact',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        emailText(),
+        const Padding(padding: EdgeInsets.only(top: 12)),
+        githubLink(),
+        const Padding(padding: EdgeInsets.only(top: 30)),
+      ],
+    );
   }
 }
