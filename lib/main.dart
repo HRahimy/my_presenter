@@ -2,8 +2,6 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_presenter/bloc_observer.dart';
 import 'package:my_presenter/firebase_options.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,12 +13,8 @@ Future<void> main() async {
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: '6LcEi7IeAAAAADgGd0o4vaSeUyr8s8oXwFDu26Ne',
   );
-  BlocOverrides.runZoned(
-    () {
-      runApp(const MyApp());
-    },
-    blocObserver: AppBlocObserver(),
-  );
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
