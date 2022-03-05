@@ -85,6 +85,7 @@ class DetailsSection extends StatelessWidget {
                 fontSize: 18,
               ),
             ),
+            Divider(),
             CardsWrap(),
           ],
         ),
@@ -116,25 +117,40 @@ class Avatar extends StatelessWidget {
   }
 }
 
-class CardsWrap extends StatelessWidget {
-  const CardsWrap({Key? key}) : super(key: key);
+class CommonPadding extends StatelessWidget {
+  const CommonPadding({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: child,
+    );
+  }
+}
+
+class CardsWrap extends StatelessWidget {
+  const CardsWrap({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonPadding(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'My skills',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              'My skills',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          const Divider(
-            thickness: 1.5,
           ),
           Wrap(
             children: const [
@@ -237,5 +253,15 @@ class SkillsCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ContactDetails extends StatelessWidget {
+  const ContactDetails({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }
