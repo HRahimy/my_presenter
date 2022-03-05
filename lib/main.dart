@@ -1,11 +1,8 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_presenter/bloc/contact_me_form/contact_me_form_cubit.dart';
 import 'package:my_presenter/bloc_observer.dart';
-import 'package:my_presenter/contact_me_form.dart';
 import 'package:my_presenter/firebase_options.dart';
 
 Future<void> main() async {
@@ -16,40 +13,26 @@ Future<void> main() async {
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: '6LcEi7IeAAAAADgGd0o4vaSeUyr8s8oXwFDu26Ne',
   );
-  final FirebaseDatabase database = FirebaseDatabase.instance;
   BlocOverrides.runZoned(
     () {
-      runApp(MyApp(
-        firebaseDatabase: database,
-      ));
+      runApp(const MyApp());
     },
     blocObserver: AppBlocObserver(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({
-    Key? key,
-    required this.firebaseDatabase,
-  }) : super(key: key);
-
-  final FirebaseDatabase firebaseDatabase;
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<FirebaseDatabase>.value(
-      value: firebaseDatabase,
-      child: BlocProvider<ContactMeFormCubit>(
-        create: (_) => ContactMeFormCubit(database: firebaseDatabase),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Hamza Rahimy Portfolio',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: const AppContent(),
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Hamza Rahimy Portfolio',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const AppContent(),
     );
   }
 }
@@ -59,13 +42,8 @@ class AppContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          Expanded(child: DetailsSection()),
-          ContactMeSection(),
-        ],
-      ),
+    return const Scaffold(
+      body: DetailsSection(),
     );
   }
 }
@@ -213,7 +191,8 @@ class CardsWrap extends StatelessWidget {
                 assetImagePath: 'assets/images/gitlab_logo.png',
               ),
             ],
-          )
+          ),
+          const Padding(padding: EdgeInsets.only(top: 12)),
         ],
       ),
     );
@@ -257,38 +236,6 @@ class SkillsCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ContactMeSection extends StatelessWidget {
-  const ContactMeSection({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ContactMeFormCubit, ContactMeFormState>(
-      builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: state.opened
-              ? Column(
-                  children: const [
-                    Divider(thickness: 1.5),
-                    ContactMeForm(),
-                  ],
-                )
-              : Column(
-                  children: [
-                    const Divider(thickness: 1.5),
-                    ElevatedButton(
-                      onPressed: () =>
-                          context.read<ContactMeFormCubit>().openForm(),
-                      child: const Text('✉  Contact me'),
-                    )
-                  ],
-                ),
-        );
-      },
     );
   }
 }
