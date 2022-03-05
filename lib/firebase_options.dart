@@ -22,7 +22,10 @@ class DefaultFirebaseOptions {
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for ios - '
@@ -45,17 +48,9 @@ class DefaultFirebaseOptions {
     appId: '1:279872623904:web:095e1343005395434b3345',
     messagingSenderId: '279872623904',
     projectId: 'h-portfolio-8a5ca',
-    databaseURL: 'https://h-portfolio-8a5ca-default-rtdb.europe-west1.firebasedatabase.app/',
     authDomain: 'h-portfolio-8a5ca.firebaseapp.com',
+    databaseURL: 'https://h-portfolio-8a5ca-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'h-portfolio-8a5ca.appspot.com',
     measurementId: 'G-EF5J057D3V',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAEDkGJrZAyyg0EoHYa0I6AjPEXRhFb44Q',
-    appId: '1:279872623904:android:b27c77f3a9cf33564b3345',
-    messagingSenderId: '279872623904',
-    projectId: 'h-portfolio-8a5ca',
-    storageBucket: 'h-portfolio-8a5ca.appspot.com',
   );
 }

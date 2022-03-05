@@ -23,7 +23,9 @@ for free for anyone wanting to build something similar.
     2. When asked for the public directory, set it to `build/web`
     3. When asked if you want to configure as a single-page app, answer `yes`
     4. Answer No when asked if you want to set up automatic builds and deploys with GitHub.
-    5. Select the desired project when asked.
+    5. Select the desired project when asked. *Note: If you had previously selected a different
+       project in the Firebase CLI, it will throw an error. To fix this, you'll need to manually
+       select the desired project by running `firebase use <project id here>`*
 3. Run `flutterfire configure`.
     1. Select only `web` option when asked which platform you want to add configuration support for.
 4. Build the web app: `flutter build web --web-renderer html`
