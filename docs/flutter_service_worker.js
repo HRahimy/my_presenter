@@ -41,9 +41,9 @@ const RESOURCES = {"assets/AssetManifest.bin": "3533405a92145d9f8559b08a828d0310
 "icons/Icon-512.png": "0eee01238d23d5107faef234f916944b",
 "icons/Icon-512_maskable.png": "14e14100a1b8030314bbdcfb761ccdd0",
 "img/flutter-logo.png": "18a3594f63542970a267c75832d9ed20",
-"index.html": "f842bd3e878f4bae2bf442612802530e",
-"/": "f842bd3e878f4bae2bf442612802530e",
-"main.dart.js": "369d8ded59325a80450b4e6a34b6134f",
+"index.html": "086e92611a97063decf269a044ed487e",
+"/": "086e92611a97063decf269a044ed487e",
+"main.dart.js": "4d490fc313cafb2dac99b3dd01950bb4",
 "manifest.json": "48f732ce0e4559d07ca030f6b81acdaf",
 "styles.css": "857ccf1cb21ec833ba7d9fd470efaf33",
 "version.json": "e40e4ab460d6ceab7dcedd67364337ce"};
