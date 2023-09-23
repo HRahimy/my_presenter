@@ -1,18 +1,10 @@
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_presenter/firebase_options.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: '6LcEi7IeAAAAADgGd0o4vaSeUyr8s8oXwFDu26Ne',
-  );
 
   runApp(const MyApp());
 }
@@ -24,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Hamza Rahimy Portfolio',
+      title: 'Hamza Yazar Portfolio',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -49,18 +41,18 @@ class DetailsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             Align(
               alignment: Alignment.center,
               child: Avatar(),
             ),
             Text(
-              'Hamza Rahimy',
+              'Hamza Yazar',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
@@ -136,11 +128,11 @@ class CardsWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CommonPadding(
+    return const CommonPadding(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 20),
             child: Text(
               'My skills',
@@ -151,15 +143,7 @@ class CardsWrap extends StatelessWidget {
             ),
           ),
           Wrap(
-            children: const [
-              SkillsCard(
-                label: 'NodeJs',
-                assetImagePath: 'assets/images/nodejs_logo.png',
-              ),
-              SkillsCard(
-                label: 'NestJS',
-                assetImagePath: 'assets/images/nestjs_logo.png',
-              ),
+            children: [
               SkillsCard(
                 label: 'ASP.NET Core',
                 assetImagePath: 'assets/images/aspnet_core.png',
@@ -169,24 +153,12 @@ class CardsWrap extends StatelessWidget {
                 assetImagePath: 'assets/images/postgre_logo.png',
               ),
               SkillsCard(
-                label: 'Apache Cassandra',
-                assetImagePath: 'assets/images/cassandra_icon.png',
-              ),
-              SkillsCard(
                 label: 'Docker',
                 assetImagePath: 'assets/images/docker_logo.png',
               ),
               SkillsCard(
-                label: 'Kubernetes',
-                assetImagePath: 'assets/images/kubernetes_logo.png',
-              ),
-              SkillsCard(
                 label: 'Google Cloud Platform',
                 assetImagePath: 'assets/images/gcp_logo.png',
-              ),
-              SkillsCard(
-                label: 'Firebase',
-                assetImagePath: 'assets/images/firebase_logo.png',
               ),
               SkillsCard(
                 label: 'Angular',
@@ -196,17 +168,9 @@ class CardsWrap extends StatelessWidget {
                 label: 'Flutter',
                 assetImagePath: 'assets/images/flutter_logo.png',
               ),
-              SkillsCard(
-                label: 'GitHub',
-                assetImagePath: 'assets/images/github_logo.png',
-              ),
-              SkillsCard(
-                label: 'GitHub',
-                assetImagePath: 'assets/images/gitlab_logo.png',
-              ),
             ],
           ),
-          const Padding(padding: EdgeInsets.only(top: 12)),
+          Padding(padding: EdgeInsets.only(top: 12)),
         ],
       ),
     );
@@ -257,6 +221,13 @@ class SkillsCard extends StatelessWidget {
 class ContactDetails extends StatelessWidget {
   const ContactDetails({Key? key}) : super(key: key);
 
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((MapEntry<String, String> e) =>
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
+
   Widget emailText() {
     return RichText(
       text: TextSpan(
@@ -271,14 +242,25 @@ class ContactDetails extends StatelessWidget {
               child: Icon(Icons.email_rounded),
             ),
           ),
-          const TextSpan(text: 'Send me an email at '),
+          const TextSpan(text: 'Email me for a full resume at '),
           TextSpan(
             style: const TextStyle(
               color: Colors.blue,
             ),
-            text: 'hamzarahimy004@gmail.com',
+            text: 'yazar.hamza.business@gmail.com',
             recognizer: TapGestureRecognizer()
-              ..onTap = () => launch('mailto:hamzarahimy004@gmail.com'),
+              ..onTap = () {
+                final emailLaunchUrl = Uri(
+                  scheme: 'mailto',
+                  path: 'yazar.hamza.business@gmail.com',
+                  query: encodeQueryParameters(<String, String>{
+                    'subject': 'Requesting your resume',
+                    'body':
+                        'Hi Hamza\n\nWe found your email address from your website and wanted to request your resume.\n\n',
+                  }),
+                );
+                launch(emailLaunchUrl.toString());
+              },
           )
         ],
       ),
@@ -296,16 +278,7 @@ class ContactDetails extends StatelessWidget {
             alignment: PlaceholderAlignment.middle,
             child: Padding(
               padding: EdgeInsets.only(right: 12),
-              child: SizedBox(
-                width: 22,
-                height: 22,
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Image(
-                    image: AssetImage('assets/images/github_logo.png'),
-                  ),
-                ),
-              ),
+              child: FaIcon(FontAwesomeIcons.github),
             ),
           ),
           const TextSpan(text: 'Check out my '),
@@ -316,7 +289,36 @@ class ContactDetails extends StatelessWidget {
             text: 'GitHub profile',
             recognizer: TapGestureRecognizer()
               ..onTap = () => launch('https://github.com/HRahimy'),
-          )
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget linkedIn() {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          color: Colors.black,
+        ),
+        children: <InlineSpan>[
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Padding(
+              padding: EdgeInsets.only(right: 12),
+              child: FaIcon(FontAwesomeIcons.linkedin),
+            ),
+          ),
+          const TextSpan(text: 'Or my '),
+          TextSpan(
+            style: const TextStyle(
+              color: Colors.blue,
+            ),
+            text: 'LinkedIn',
+            recognizer: TapGestureRecognizer()
+              ..onTap = () =>
+                  launch('https://www.linkedin.com/in/hamza-yazar-a9550a147/'),
+          ),
         ],
       ),
     );
@@ -340,6 +342,8 @@ class ContactDetails extends StatelessWidget {
         emailText(),
         const Padding(padding: EdgeInsets.only(top: 12)),
         githubLink(),
+        const Padding(padding: EdgeInsets.only(top: 12)),
+        linkedIn(),
         const Padding(padding: EdgeInsets.only(top: 30)),
       ],
     );
